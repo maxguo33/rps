@@ -1,4 +1,4 @@
-let humanScore = 0;
+let playerScore = 0;
 let computerScore = 0;
 
 function getComputerChoice() {
@@ -12,69 +12,82 @@ function getComputerChoice() {
   }
 }
 
-function getHumanChoice() {
-  humanChoice = prompt("Rock, Paper, or Scissors?");
-  return humanChoice;
+function updateScore() {
+    document.getElementById('score-display').textContent =
+    `Player: ${playerScore} | Computer: ${computerScore}`;
 }
 
-function playRound() {
+function checkWinner() {
+    if (playerScore >= 5 || computerScore >= 5) {
+        if (playerScore >= 5){
+            document.getElementById("winner-announcement").textContent
+            = "YOU WON THE GAME!";
+        } else {
+            document.getElementById("winner-announcement").textContent
+            = "YOU LOST THE GAME...";
+        }
+    }
+}
+
+function playRound(playerSelection) {
   let computerChoice = getComputerChoice();
-  let humanChoice = getHumanChoice();
-  console.log("The computer chose " + computerChoice);
+  let humanChoice = playerSelection.toLowerCase();
+  document.getElementById('round-result').textContent = `The computer chose ${computerChoice}`;
   switch (humanChoice) {
     case "rock":
       switch (computerChoice) {
         case "rock":
-          return 2;
+          break;
         case "paper":
-          return 0;
+          computerScore++;
+          break;
         case "scissors":
-          return 1;
+          playerScore++;
+          break;
       }
       break;
 
     case "paper":
       switch (computerChoice) {
         case "rock":
-          return 1;
+          playerScore++;
+          break;
         case "paper":
-          return 2;
+          break;
         case "scissors":
-          return 0;
+          computerScore++;
+          break;
       }
       break;
 
     case "scissors":
       switch (computerChoice) {
         case "rock":
-          return 0;
+            computerScore++;
+            break;
         case "paper":
-          return 1;
+            playerScore++;
+            break;
         case "scissors":
-          return 2;
+            break;
       }
       break;
   }
+  updateScore();
+  checkWinner();
 }
 
-function playGame() {
-  let playerScore = 0;
-  let computerScore = 0;
-  for (i = 0; i < 5; i++) {
-    winner = playRound();
-    if (winner == 1) {
-      playerScore++;
-    } else if (winner == 0) {
-      computerScore++;
-    }
-  }
-  if (playerScore > computerScore) {
-    console.log("YOU WON THE GAME!!!!!");
-  } else if (computerScore > playerScore) {
-    console.log("YOU LOST THE GAME...");
-  } else {
-    console.log("THE GAME WAS A TIE.");
-  }
-}
+// Add event listeners to buttons
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('rock-btn').addEventListener('click', function() {
+    playRound('rock');
+  });
 
-playGame();
+  document.getElementById('paper-btn').addEventListener('click', function() {
+    playRound('paper');
+  });
+
+  document.getElementById('scissors-btn').addEventListener('click', function() {
+    playRound('scissors');
+  });
+});
